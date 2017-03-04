@@ -32,6 +32,8 @@ def image(name):
         try:
             org_link = Url.query.filter_by(short_link=name).first()
         except Exception:
+            raise Exception
+        if org_link is None:
             return render_template('not_link.html')
         return redirect(org_link.org_link)
 
@@ -49,8 +51,3 @@ def accept():
     url = url_for('home', _external=True)
     final_url = url + rand_link
     return render_template('output.html', url=final_url)
-
-
-
-
-
