@@ -24,7 +24,7 @@ def home():
 @app.route('/<name>', methods=['GET'])
 def image(name):
     if name == 'logo.png':
-        return send_file(name)
+        return send_file('logo.png')
     elif name == 'time':
         time = utils.time()
         return render_template('time.html', time=time)
