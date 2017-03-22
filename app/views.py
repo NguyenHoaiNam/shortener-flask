@@ -22,8 +22,7 @@ def internal_server_error(error):
 
 @app.route('/', methods=['GET'])
 def home():
-    return "Nguyen Hoai Nam"
-    # return render_template('index.html')
+    return render_template('index.html')
 
 
 @app.route('/<name>', methods=['GET'])
@@ -35,12 +34,12 @@ def image(name):
         return render_template('time.html', time=time)
     else:
         try:
-            org_link = Url.query.filter_by(short_link=name).first()
+            origin_link = session.query(Url).filter(Url.short_link == name).one()
         except Exception:
             raise Exception
-        if org_link is None:
+        if origin_link is None:
             return render_template('not_link.html')
-        return redirect(org_link.org_link)
+        return redirect(origin_link.org_link)
 
 
 @app.route('/', methods=['POST'])
