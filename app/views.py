@@ -1,14 +1,13 @@
 import utils
 from app import app
 from flask import request, url_for, render_template, send_file, redirect
-from models import db, Url
-
+from models import Url
+from db_create import engine
 from sqlalchemy.orm import sessionmaker
 
 
 Session = sessionmaker(bind=engine)
 session = Session()
-session = db.session
 
 
 @app.errorhandler(404)
@@ -23,7 +22,8 @@ def internal_server_error(error):
 
 @app.route('/', methods=['GET'])
 def home():
-    return render_template('index.html')
+    return "Nguyen Hoai Nam"
+    # return render_template('index.html')
 
 
 @app.route('/<name>', methods=['GET'])
