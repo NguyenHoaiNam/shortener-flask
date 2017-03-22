@@ -4,6 +4,9 @@ from flask import request, url_for, render_template, send_file, redirect
 from models import Url
 from db_create import engine
 from sqlalchemy.orm import sessionmaker
+from rpc_client import TaskClient
+
+task_rpc = TaskClient()
 
 
 Session = sessionmaker(bind=engine)
@@ -34,12 +37,12 @@ def image(name):
         return render_template('time.html', time=time)
     else:
         try:
-            origin_link = session.query(Url).filter(Url.short_link == name).one()
+            origin_link = task_rpc.query_database(session, name)
         except Exception:
             raise Exception
         if origin_link is None:
             return render_template('not_link.html')
-        return redirect(origin_link.org_link)
+        return redirect(origin_link)
 
 
 @app.route('/', methods=['POST'])
@@ -47,11 +50,7 @@ def accept():
     data_request = request.form['org_link']
     rand_link = utils.rand()
     record = Url(org_link=data_request, short_link=rand_link)
-    try:
-        session.add(record)
-        session.commit()
-    except Exception as e:
-        raise e
+    task_rpc.insert_database(session, record)
     url = url_for('home', _external=True)
     final_url = url + rand_link
     return render_template('output.html', url=final_url)
