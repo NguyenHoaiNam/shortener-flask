@@ -1,10 +1,11 @@
-from app.views import app
-from flask_sqlalchemy import SQLAlchemy
-db = SQLAlchemy(app)
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
 
 
-class Url(db.Model):
+class Url(Base):
     __tablename__ = 'urls'
-    id = db.Column(db.Integer, primary_key=True)
-    org_link = db.Column(db.String(250), unique=True)
-    short_link = db.Column(db.String(100), unique=True)
+    id = Column(Integer, primary_key=True)
+    org_link = Column(String, unique=True)
+    short_link = Column(String)

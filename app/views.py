@@ -3,6 +3,11 @@ from app import app
 from flask import request, url_for, render_template, send_file, redirect
 from models import db, Url
 
+from sqlalchemy.orm import sessionmaker
+
+
+Session = sessionmaker(bind=engine)
+session = Session()
 session = db.session
 
 
