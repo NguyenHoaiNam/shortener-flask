@@ -8,8 +8,7 @@ rabbit_opts = [
     cfg.StrOpt('rabbit_userid', default='guest'),
     cfg.StrOpt('rabbit_password', default='guest'),
     cfg.StrOpt('rabbit_login_method', default='AMQPLAIN'),
-    cfg.StrOpt('rabbit_virtual_host', default='/'),
-    cfg.StrOpt('rpc_backend', default='rabbit')
+    cfg.StrOpt('rabbit_virtual_host', default='/')
 ]
 
 

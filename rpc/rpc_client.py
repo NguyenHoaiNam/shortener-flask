@@ -1,12 +1,9 @@
 import oslo_messaging as om
-from oslo_config import cfg
+import conf
 
-from app import client_config
+CONF = conf.CONF
 
-transport = om.get_transport(cfg.CONF)
-client_config.register_configure()
-cfg.CONF(['--config-file', 'client.conf'])
-transport = om.get_transport(cfg.CONF)
+transport = om.get_transport(CONF)
 target = om.Target(topic='shortener')
 
 

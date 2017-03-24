@@ -1,5 +1,4 @@
-from server.server_rpc import server_rpc
+from rpc.server_rpc import main
 
 if __name__ == "__main__":
-    server_rpc.start()
-    server_rpc.wait()
+    main()

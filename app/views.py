@@ -1,10 +1,11 @@
+from flask import request, url_for, render_template, send_file, redirect
+from sqlalchemy.orm import sessionmaker
+
 import utils
 from app import app
-from flask import request, url_for, render_template, send_file, redirect
-from models import Url
 from db_create import engine
-from sqlalchemy.orm import sessionmaker
-from rpc_client import TaskClient
+from models import Url
+from rpc.rpc_client import TaskClient
 
 task_rpc = TaskClient()
 
