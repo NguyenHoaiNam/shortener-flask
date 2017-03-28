@@ -53,7 +53,8 @@ def accept():
         session.add(record)
         session.commit()
     except Exception:
-        raise e
+        session.rollback()
+        raise Exception
     url = url_for('home', _external=True)
     final_url = url + rand_link
     return render_template('output.html', url=final_url)
