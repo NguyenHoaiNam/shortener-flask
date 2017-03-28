@@ -1,5 +1,5 @@
 from flask import request, url_for, render_template, send_file, redirect
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, exc
 
 import utils
 from app import app
@@ -12,16 +12,6 @@ from rpc.rpc_client import TaskClient
 
 Session = sessionmaker(bind=engine)
 session = Session()
-
-
-# @app.errorhandler(404)
-# def page_not_found(error):
-#     return render_template('404.html'), 404
-#
-#
-# @app.errorhandler(500)
-# def internal_server_error(error):
-#     return render_template('500.html'), 500
 
 
 @app.route('/', methods=['GET'])
@@ -48,13 +38,19 @@ def accept():
     data_request = request.form['org_link']
     rand_link = utils.rand()
     record = Url(org_link=data_request, short_link=rand_link)
-    #task_rpc.insert_database(session, record)
     try:
-        session.add(record)
-        session.commit()
-    except Exception:
-        session.rollback()
-        raise Exception
+        session.query(Url).filter(Url.short_link == rand_link).one()
+        rand_link = utils.rand()
+        record = Url(org_link=data_request, short_link=rand_link)
+    except exc.NoResultFound:
+        # task_rpc.insert_database(session, record)
+        try:
+            session.add(record)
+            session.commit()
+        except Exception:
+            session.rollback()
+            raise Exception
+
     url = url_for('home', _external=True)
     final_url = url + rand_link
     return render_template('output.html', url=final_url)

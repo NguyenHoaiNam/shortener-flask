@@ -4,3 +4,4 @@ app.config.from_object('config')
 
 from app import models
 from app import views
+from app import exceptions
