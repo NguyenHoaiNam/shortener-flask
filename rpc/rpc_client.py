@@ -13,7 +13,8 @@ def get_client():
 
 class TaskClient(object):
     def __init__(self):
-        self._client = get_client()
+        self.rpc_client = get_client()
+        self._client = self.rpc_client.prepare()
 
     def _cast(self, cctx, name, **kwargs):
         return self._client.cast(cctx, name, **kwargs)
@@ -21,8 +22,8 @@ class TaskClient(object):
     def _call(self, cctx, name, **kwargs):
         return self._client.call(cctx, name, **kwargs)
 
-    def insert_database(self, cctx, record):
-        return self._cast(cctx, record)
+    def insert_database(self, record):
+        return self._call({}, 'insert_database', record=record.to_dict())
 
-    def query_database(self, cctx, short_link):
-        return self._call(cctx, short_link)
+    def query_database(self, short_link):
+        return self._call({}, 'query_database', short_link=short_link)

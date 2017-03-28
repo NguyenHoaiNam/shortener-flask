@@ -1,23 +1,33 @@
 import oslo_messaging as om
+
 import conf
 from app.models import Url
+from db_create import engine
+from sqlalchemy.orm import sessionmaker
 
 
 CONF = conf.CONF
 transport = om.get_transport(CONF)
-target = om.Target(topic='shortener', server='10.164.180.110')
-
+target = om.Target(topic='shortener', server="localhost")
+Session = sessionmaker(bind=engine)
 
 class InteractDB(object):
-    def insert_database(self, cctx, record):
-        try:
-            cctx.add(record)
-            cctx.commit()
-        except Exception as e:
-            raise e
 
-    def querry_database(self, cctx, short_link):
-        origin_link = cctx.query(Url).filter(
+    def __init__(self):
+        self.session = Session()
+
+    def insert_database(self, cctx, record):
+        return record
+        # rc = Url(org_link=record['org_link'],
+        #          short_link=record['short_link'])
+        # try:
+        #     self.session.add(rc)
+        #     self.session.commit()
+        # except Exception as e:
+        #     raise e
+
+    def query_database(self, cctx, short_link):
+        origin_link = self.session.query(Url).filter(
             Url.short_link == short_link).one()
         return origin_link.org_link
 
@@ -30,4 +40,6 @@ def main():
                                    access_policy=access_policy)
     server_rpc.start()
     server_rpc.wait()
+
+##################################################################
 

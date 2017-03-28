@@ -7,7 +7,7 @@ from db_create import engine
 from models import Url
 from rpc.rpc_client import TaskClient
 
-#task_rpc = TaskClient()
+task_rpc = TaskClient()
 
 
 Session = sessionmaker(bind=engine)
@@ -43,13 +43,14 @@ def accept():
         rand_link = utils.rand()
         record = Url(org_link=data_request, short_link=rand_link)
     except exc.NoResultFound:
-        # task_rpc.insert_database(session, record)
-        try:
-            session.add(record)
-            session.commit()
-        except Exception:
-            session.rollback()
-            raise Exception
+        return task_rpc.insert_database(record)
+
+        # try:
+        #     session.add(record)
+        #     session.commit()
+        # except Exception:
+        #     session.rollback()
+        #     raise Exception
 
     url = url_for('home', _external=True)
     final_url = url + rand_link
