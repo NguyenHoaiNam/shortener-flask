@@ -27,7 +27,7 @@ def image(name):
     else:
         # Call RPC server
         origin_link = task_rpc.query_database(name)
-    return redirect(origin_link)
+    return redirect(origin_link.get('org_link'))
 
 
 @app.route('/', methods=['POST'])

@@ -29,7 +29,9 @@ class InteractDB(object):
     def query_database(self, cctx, short_link):
         origin_link = self.session.query(Url).filter(
             Url.short_link == short_link).one()
-        return origin_link.org_link
+        return {
+            'org_link': origin_link.org_link
+        }
 
 
 def main():
