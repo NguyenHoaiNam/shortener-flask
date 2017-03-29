@@ -1,6 +1,7 @@
 flask==0.12
 SQLAlchemy==1.1.5
 oslo.config==3.23.0
-oslo.messaging
+oslo.messaging==5.19.0
 oslo.versionedobjects
 eventlet
+oslo.utils
