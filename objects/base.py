@@ -57,4 +57,3 @@ class UrlObject(BaseUrlObject):
         :return:
         """
         pass
-example
