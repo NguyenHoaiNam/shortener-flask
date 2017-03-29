@@ -27,10 +27,10 @@ def image(name):
         time = utils.time()
         return render_template('time.html', time=time)
     else:
-        origin_link = task_rpc.query_database(session, name)
+        origin_link = task_rpc.query_database(name)
         # origin_link = session.query(Url).filter(Url.short_link == name).one()
         # origin_link_aaa = origin_link.org_link
-    return redirect()
+    return redirect(origin_link)
 
 
 @app.route('/', methods=['POST'])
