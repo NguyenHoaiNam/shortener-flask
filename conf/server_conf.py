@@ -11,7 +11,7 @@ rabbit_opts = [
     cfg.StrOpt('rabbit_virtual_host', default='/')
 ]
 
-pin_version = cfg.StrOpt('pin_version', default=None)
+pin_version = cfg.StrOpt('pin_release', default=None)
 
 
 def register_configure(conf):
