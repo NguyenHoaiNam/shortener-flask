@@ -27,10 +27,10 @@ def image(name):
         time = utils.time()
         return render_template('time.html', time=time)
     else:
-        #origin_link = task_rpc.query_database(session, name)
-        origin_link = session.query(Url).filter(Url.short_link == name).one()
-        origin_link_aaa = origin_link.org_link
-    return redirect(origin_link_aaa)
+        origin_link = task_rpc.query_database(session, name)
+        # origin_link = session.query(Url).filter(Url.short_link == name).one()
+        # origin_link_aaa = origin_link.org_link
+    return redirect()
 
 
 @app.route('/', methods=['POST'])
@@ -38,19 +38,8 @@ def accept():
     data_request = request.form['org_link']
     rand_link = utils.rand()
     record = Url(org_link=data_request, short_link=rand_link)
-    try:
-        session.query(Url).filter(Url.short_link == rand_link).one()
-        rand_link = utils.rand()
-        record = Url(org_link=data_request, short_link=rand_link)
-    except exc.NoResultFound:
-        return task_rpc.insert_database(record)
 
-        # try:
-        #     session.add(record)
-        #     session.commit()
-        # except Exception:
-        #     session.rollback()
-        #     raise Exception
+    task_rpc.insert_database(record)
 
     url = url_for('home', _external=True)
     final_url = url + rand_link

@@ -23,7 +23,8 @@ class TaskClient(object):
         return self._client.call(cctx, name, **kwargs)
 
     def insert_database(self, record):
-        return self._call({}, 'insert_database', record=record.to_dict())
+        return self._call({}, 'insert_database',
+                          record=record.to_dict())
 
     def query_database(self, short_link):
         return self._call({}, 'query_database', short_link=short_link)
