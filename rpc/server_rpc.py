@@ -1,8 +1,6 @@
-import  json
-
 import oslo_messaging as om
-
 import conf
+
 from app.models import Url
 from db_create import engine
 from sqlalchemy.orm import sessionmaker
@@ -36,11 +34,7 @@ class InteractDB(object):
 
 def main():
     endpoints = [InteractDB(), ]
-    # access_policy = om.rpc.dispatcher.DefaultRPCAccessPolicy
     server_rpc = om.get_rpc_server(transport, target,
                                    endpoints, executor='blocking')
     server_rpc.start()
     server_rpc.wait()
-
-##################################################################
-

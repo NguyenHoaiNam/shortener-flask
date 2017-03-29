@@ -1,5 +1,5 @@
 from flask import request, url_for, render_template, send_file, redirect
-from sqlalchemy.orm import sessionmaker, exc
+from sqlalchemy.orm import sessionmaker
 
 import utils
 from app import app
@@ -8,8 +8,6 @@ from models import Url
 from rpc.rpc_client import TaskClient
 
 task_rpc = TaskClient()
-
-
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -27,9 +25,8 @@ def image(name):
         time = utils.time()
         return render_template('time.html', time=time)
     else:
+        # Call RPC server
         origin_link = task_rpc.query_database(name)
-        # origin_link = session.query(Url).filter(Url.short_link == name).one()
-        # origin_link_aaa = origin_link.org_link
     return redirect(origin_link)
 
 
@@ -38,9 +35,8 @@ def accept():
     data_request = request.form['org_link']
     rand_link = utils.rand()
     record = Url(org_link=data_request, short_link=rand_link)
-
+    # Call RPC server
     task_rpc.insert_database(record)
-
     url = url_for('home', _external=True)
     final_url = url + rand_link
     return render_template('output.html', url=final_url)
