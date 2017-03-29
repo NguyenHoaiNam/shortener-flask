@@ -11,7 +11,11 @@ rabbit_opts = [
     cfg.StrOpt('rabbit_virtual_host', default='/')
 ]
 
+pin_version = cfg.StrOpt('pin_version', default=None)
+
 
 def register_configure(conf):
     conf.register_group(oslo_messaging_rabbit_group)
-    conf.register_opts(rabbit_opts)
+    conf.register_opts(rabbit_opts, group=oslo_messaging_rabbit_group)
+
+    conf.register_opt(pin_version)
