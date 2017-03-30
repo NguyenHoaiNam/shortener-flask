@@ -1,7 +1,9 @@
 import oslo_messaging as om
-import conf
 
+import conf
 from conf.release_mappings import RELEASE_MAPPINGS
+from objects.base import UrlObjectSerializer
+
 CONF = conf.CONF
 
 transport = om.get_transport(CONF)
@@ -19,12 +21,14 @@ class TaskClient(object):
 
         2.0 - Initial version
     """
+
     def __init__(self):
         upgrade_level = CONF.pin_release
         release_version = RELEASE_MAPPINGS.get(upgrade_level)
+        serializer = UrlObjectSerializer()
         version_cap = release_version['rpc']
         self.rpc_client = om.RPCClient(transport, target,
-                                       version_cap=version_cap)
+                                       version_cap=version_cap, serializer=serializer)
 
     def _cast(self, cctx, name, version, **kwargs):
         client = self.rpc_client.prepare(version=version)

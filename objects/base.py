@@ -57,3 +57,7 @@ class UrlObject(BaseUrlObject):
         :return:
         """
         pass
+
+class UrlObjectSerializer(ovoo_base.VersionedObjectSerializer):
+    """Url serializer."""
+    OBJ_BASE_CLASS = UrlObject
