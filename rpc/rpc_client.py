@@ -7,7 +7,7 @@ from objects.base import UrlObjectSerializer
 CONF = conf.CONF
 RPC_API_VERSION = '2.0'
 transport = om.get_transport(CONF)
-target = om.Target(topic='shortener-nam', version=RPC_API_VERSION)
+target = om.Target(topic='shortener', version=RPC_API_VERSION)
 
 
 def get_client(version_cap, serializer):
@@ -38,7 +38,7 @@ class TaskClient(object):
         cctx = self.client.prepare(version=version)
         return cctx.cast({}, 'insert_database', record=record)
 
-    def query_database(self, short_link):
+    def query_database(self, record):
         version = '2.0'
         cctx = self.client.prepare(version=version)
-        return cctx.call({}, 'query_database', short_link=short_link)
+        return cctx.call({}, 'query_database', record=record)

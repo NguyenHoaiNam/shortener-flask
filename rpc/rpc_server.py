@@ -12,7 +12,7 @@ from objects.base import UrlObjectSerializer
 CONF = conf.CONF
 transport = om.get_transport(CONF)
 RPC_API_VERSION = '2.9'
-target = om.Target(topic='shortener-nam', server="10.164.178.141")
+target = om.Target(topic='shortener', server="10.164.178.141")
 
 
 engine = create_engine(config.SQLALCHEMY_DATABASE_URI, echo=True)
@@ -29,20 +29,21 @@ class InteractDB(object):
         self.session = self.Session()
 
     def insert_database(self, cctx, record):
-        rc = Url(org_link=record['org_link'],
-                 short_link=record['short_link'])
-        try:
-            self.session.add(rc)
-            self.session.commit()
-        except Exception as e:
-            raise e
+        record.create(cctx)
 
-    def query_database(self, cctx, short_link):
-        origin_link = self.session.query(Url).filter(
-            Url.short_link == short_link).one()
-        return {
-            'org_link': origin_link.org_link
-        }
+    def query_database(self, cctx, **karg):
+        short_link = karg.pop('short_link', None)
+        record = karg.pop('record', None)
+        if short_link:
+            # backward compatible with Newton release
+            origin_link = self.session.query(Url).filter(
+                Url.short_link == short_link).one()
+            return {
+                'org_link': origin_link.org_link
+            }
+        else:
+            record.get_from_short_link(cctx)
+            return record
 
 
 def main():

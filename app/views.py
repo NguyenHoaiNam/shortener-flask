@@ -22,7 +22,8 @@ def image(name):
         return render_template('time.html', time=time)
     else:
         # Call RPC server
-        origin_link = task_rpc.query_database(name)
+        record = UrlObject(short_link=name)
+        origin_link = task_rpc.query_database(record)
     return redirect(origin_link.get('org_link'))
 
 

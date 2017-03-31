@@ -3,9 +3,16 @@ This is testing module with O.VO base objects
 """
 from oslo_versionedobjects import base as ovoo_base, fields
 from oslo_utils import versionutils
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
 
+from app.models import Url
+import config
 
 URL_OPTIONAL_ATTRS = []
+engine = create_engine(config.SQLALCHEMY_DATABASE_URI, echo=True)
+Session = sessionmaker(bind=engine)
+db_api = Session()
 
 class BaseUrlObject(ovoo_base.VersionedObject, ovoo_base.VersionedObjectDictCompat):
     # OBJ_SERIAL_NAMESPACE = 'test_amqp'
@@ -39,7 +46,13 @@ class UrlObject(BaseUrlObject):
         Connect with db and do something
         :return:
         """
-        pass
+        rc = Url(org_link=self.org_link,
+                 short_link=self.short_link)
+        try:
+            db_api.add(rc)
+            db_api.commit()
+        except Exception as e:
+            raise e
 
     @ovoo_base.remotable
     def save(self, context):
@@ -49,6 +62,12 @@ class UrlObject(BaseUrlObject):
         :return:
         """
         pass
+
+    @ovoo_base.remotable
+    def get_from_short_link(self, context):
+        origin_link = db_api.query(Url).filter(
+            Url.short_link == self.short_link).one()
+        self.org_link = origin_link.org_link
 
     def obj_load_attr(self, attrname):
         """
