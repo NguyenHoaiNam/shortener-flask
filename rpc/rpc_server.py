@@ -10,7 +10,9 @@ from sqlalchemy import create_engine
 
 CONF = conf.CONF
 transport = om.get_transport(CONF)
-target = om.Target(topic='shortener', server="10.164.178.141")
+RPC_API_VERSION = '2.0'
+target = om.Target(topic='shortener', version=RPC_API_VERSION,
+                   server="10.164.178.141")
 engine = create_engine(config.SQLALCHEMY_DATABASE_URI, echo=True)
 
 
@@ -18,7 +20,6 @@ class InteractDB(object):
     """
     Server side of shortener for API
     """
-
     def __init__(self):
         self.Session = sessionmaker(bind=engine)
         self.session = self.Session()

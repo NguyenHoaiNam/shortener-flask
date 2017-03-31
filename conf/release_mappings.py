@@ -36,8 +36,8 @@ RELEASE_MAPPINGS['old'] = RELEASE_MAPPINGS['test_amqp']
 
 DEFAULT_RELEASE = 'test_amqp'
 RELEASE_MAPPINGS = {
-    'test_amqp':  None,
-    'new': {
+    'test_amqp': None,
+    'ocata': {
         'rpc': '2.0',
         'objects': {
             'Url': '1.0'
@@ -45,4 +45,4 @@ RELEASE_MAPPINGS = {
     }
 }
 
-RELEASE_MAPPINGS['old'] = RELEASE_MAPPINGS['test_amqp']
+RELEASE_MAPPINGS['newton'] = RELEASE_MAPPINGS['test_amqp']
