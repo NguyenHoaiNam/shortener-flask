@@ -5,7 +5,7 @@ from conf.release_mappings import RELEASE_MAPPINGS
 from objects.base import UrlObjectSerializer
 
 CONF = conf.CONF
-RPC_API_VERSION = '2.0'
+RPC_API_VERSION = '1.1'
 transport = om.get_transport(CONF)
 target = om.Target(topic='shortener', version=RPC_API_VERSION)
 
@@ -34,11 +34,11 @@ class TaskClient(object):
         self.client = get_client(version_cap, serializer)
 
     def insert_database(self, record):
-        version = '2.0'
+        version = '1.1'
         cctx = self.client.prepare(version=version)
-        return cctx.cast({}, 'insert_database', record=record)
+        return cctx.call({}, 'insert_database', record=record)
 
     def query_database(self, record):
-        version = '2.0'
+        version = '1.1'
         cctx = self.client.prepare(version=version)
         return cctx.call({}, 'query_database', record=record)

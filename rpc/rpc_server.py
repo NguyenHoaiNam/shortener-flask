@@ -11,8 +11,8 @@ from objects.base import UrlObjectSerializer
 
 CONF = conf.CONF
 transport = om.get_transport(CONF)
-RPC_API_VERSION = '2.9'
-target = om.Target(topic='shortener', server="10.164.178.141")
+RPC_API_VERSION = '1.9'
+target = om.Target(topic='shortener-dai', server="10.164.178.141")
 
 
 engine = create_engine(config.SQLALCHEMY_DATABASE_URI, echo=True)
@@ -29,7 +29,16 @@ class InteractDB(object):
         self.session = self.Session()
 
     def insert_database(self, cctx, record):
-        record.create(cctx)
+        if type(record) is dict:
+            rc = Url(org_link=self.org_link,
+                     short_link=self.short_link)
+            try:
+                self.session.add(rc)
+                self.session.commit()
+            except Exception as e:
+                raise e
+        else:
+            record.create(cctx)
 
     def query_database(self, cctx, **karg):
         short_link = karg.pop('short_link', None)
