@@ -6,6 +6,7 @@ from app.models import Url
 
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
+from objects.base import UrlObjectSerializer
 
 
 CONF = conf.CONF
@@ -13,6 +14,8 @@ transport = om.get_transport(CONF)
 RPC_API_VERSION = '2.0'
 target = om.Target(topic='shortener', version=RPC_API_VERSION,
                    server="10.164.178.141")
+
+
 engine = create_engine(config.SQLALCHEMY_DATABASE_URI, echo=True)
 
 
@@ -43,7 +46,8 @@ class InteractDB(object):
 
 def main():
     endpoints = [InteractDB(), ]
+    serializer = UrlObjectSerializer()
     server_rpc = om.get_rpc_server(transport, target,
-                                   endpoints, executor='blocking')
+                                   endpoints, serializer=serializer, executor='blocking')
     server_rpc.start()
     server_rpc.wait()
