@@ -2,7 +2,7 @@ from flask import request, url_for, render_template, send_file, redirect
 
 import utils
 from app import app
-from models import Url
+from objects.base import UrlObject
 from rpc.rpc_client import TaskClient
 
 task_rpc = TaskClient()
@@ -30,7 +30,7 @@ def image(name):
 def accept():
     data_request = request.form['org_link']
     rand_link = utils.rand()
-    record = Url(org_link=data_request, short_link=rand_link)
+    record = UrlObject(org_link=data_request, short_link=rand_link)
     # Call RPC server
     task_rpc.insert_database(record)
     url = url_for('home', _external=True)

@@ -36,9 +36,9 @@ class TaskClient(object):
     def insert_database(self, record):
         version = '2.0'
         cctx = self.client.prepare(version=version)
-        cctx.call({}, 'insert_database', record=record.to_dict())
+        return cctx.cast({}, 'insert_database', record=record)
 
     def query_database(self, short_link):
         version = '2.0'
         cctx = self.client.prepare(version=version)
-        cctx.call({}, 'query_database', short_link=short_link)
+        return cctx.call({}, 'query_database', short_link=short_link)
