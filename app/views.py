@@ -1,15 +1,11 @@
 from flask import request, url_for, render_template, send_file, redirect
-from sqlalchemy.orm import sessionmaker
 
 import utils
 from app import app
-from db_create import engine
 from models import Url
 from rpc.rpc_client import TaskClient
 
 task_rpc = TaskClient()
-Session = sessionmaker(bind=engine)
-session = Session()
 
 
 @app.route('/', methods=['GET'])
