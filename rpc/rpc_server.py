@@ -1,17 +1,22 @@
 import oslo_messaging as om
 import conf
+import config
 
 from app.models import Url
-from db_create import engine
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
 CONF = conf.CONF
 transport = om.get_transport(CONF)
 target = om.Target(topic='shortener', server="10.164.178.141")
+engine = create_engine(config.SQLALCHEMY_DATABASE_URI, echo=True)
 
 
 class InteractDB(object):
+    """
+    Server side of shortener for API
+    """
 
     def __init__(self):
         self.Session = sessionmaker(bind=engine)
