@@ -11,9 +11,8 @@ from objects.base import UrlObjectSerializer
 
 CONF = conf.CONF
 transport = om.get_transport(CONF)
-RPC_API_VERSION = '2.0'
-target = om.Target(topic='shortener', version=RPC_API_VERSION,
-                   server="10.164.178.141")
+RPC_API_VERSION = '2.9'
+target = om.Target(topic='shortener-nam', server="10.164.178.141")
 
 
 engine = create_engine(config.SQLALCHEMY_DATABASE_URI, echo=True)
@@ -23,6 +22,8 @@ class InteractDB(object):
     """
     Server side of shortener for API
     """
+    target = om.Target(version=RPC_API_VERSION)
+
     def __init__(self):
         self.Session = sessionmaker(bind=engine)
         self.session = self.Session()
@@ -48,6 +49,7 @@ def main():
     endpoints = [InteractDB(), ]
     serializer = UrlObjectSerializer()
     server_rpc = om.get_rpc_server(transport, target,
-                                   endpoints, serializer=serializer, executor='blocking')
+                                   endpoints, serializer=serializer,
+                                   executor='blocking')
     server_rpc.start()
     server_rpc.wait()
