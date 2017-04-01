@@ -12,7 +12,7 @@ from objects.base import UrlObjectSerializer
 CONF = conf.CONF
 transport = om.get_transport(CONF)
 RPC_API_VERSION = '1.9'
-target = om.Target(topic='shortener-dai', server="10.164.178.141")
+target = om.Target(topic='shortener', server='shortener')
 
 
 engine = create_engine(config.SQLALCHEMY_DATABASE_URI, echo=True)
@@ -30,8 +30,8 @@ class InteractDB(object):
 
     def insert_database(self, cctx, record):
         if type(record) is dict:
-            rc = Url(org_link=self.org_link,
-                     short_link=self.short_link)
+            rc = Url(org_link=record['org_link'],
+                     short_link=record['short_link'])
             try:
                 self.session.add(rc)
                 self.session.commit()
