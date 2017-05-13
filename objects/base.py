@@ -14,7 +14,9 @@ engine = create_engine(config.SQLALCHEMY_DATABASE_URI, echo=True)
 Session = sessionmaker(bind=engine)
 db_api = Session()
 
-class BaseUrlObject(ovoo_base.VersionedObject, ovoo_base.VersionedObjectDictCompat):
+
+class BaseUrlObject(ovoo_base.VersionedObject,
+                    ovoo_base.VersionedObjectDictCompat):
     # OBJ_SERIAL_NAMESPACE = 'test_amqp'
     OBJ_PROJECT_NAMESPACE = 'test'
 
@@ -76,6 +78,7 @@ class UrlObject(BaseUrlObject):
         :return:
         """
         pass
+
 
 class UrlObjectSerializer(ovoo_base.VersionedObjectSerializer):
     """Url serializer."""
