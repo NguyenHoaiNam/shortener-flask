@@ -43,7 +43,7 @@ class UrlObject(BaseUrlObject):
             pass
 
     @ovoo_base.remotable
-    def create(self):
+    def create(self, context):
         """
         Connect with db and do something
         :return:
